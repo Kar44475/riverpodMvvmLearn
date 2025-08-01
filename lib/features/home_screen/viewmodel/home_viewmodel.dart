@@ -43,25 +43,31 @@ class HomeViewModel extends _$HomeViewModel {
     return null;
   }
 
-  Future<void> getData() async {
+  Future<void> getData({bool forceRefresh = false}) async {
     final currentState = state?.value;
     
     // If we already have data, show loading more indicator
-    if (currentState != null && currentState.products.isNotEmpty) {  
+    if (currentState != null && currentState.products.isNotEmpty && !forceRefresh) {  
       if (currentState.isLoadingMore) return; // Prevent duplicate calls
       
       state = AsyncValue.data(currentState.copyWith(isLoadingMore: true));
     } else {
-      // First load - show main loading indicator
+      // First load or refresh - show main loading indicator
       state = const AsyncValue.loading();
+      if (forceRefresh) {
+        _currentPage = 1; // Reset page count on refresh
+      }
     }
 
     try {
-      final result = await _homeRepository.getData(pageCount: _currentPage);
+      final result = await _homeRepository.getData(
+        pageCount: _currentPage,
+        forceRefresh: forceRefresh,
+      );
 
       result.fold(
         (failure) {
-          if (currentState != null && currentState.products.isNotEmpty) {
+          if (currentState != null && currentState.products.isNotEmpty && !forceRefresh) {
             // If we have existing data, just remove the loading more indicator and show error
             state = AsyncValue.data(currentState.copyWith(
               isLoadingMore: false,
@@ -73,7 +79,7 @@ class HomeViewModel extends _$HomeViewModel {
           }
         },
         (newProducts) {
-          final existingProducts = currentState?.products ?? [];
+          final existingProducts = forceRefresh ? <Product>[] : (currentState?.products ?? []);
           final allProducts = [...existingProducts, ...newProducts];
           
           state = AsyncValue.data(HomeState(
@@ -85,7 +91,7 @@ class HomeViewModel extends _$HomeViewModel {
         },
       );
     } catch (e, stackTrace) {
-      if (currentState != null && currentState.products.isNotEmpty) {
+      if (currentState != null && currentState.products.isNotEmpty && !forceRefresh) {
         // If we have existing data, just remove the loading more indicator
         state = AsyncValue.data(currentState.copyWith(
           isLoadingMore: false,
@@ -96,5 +102,19 @@ class HomeViewModel extends _$HomeViewModel {
         state = AsyncValue.error(e, stackTrace);
       }
     }
+  }
+
+  // Method to refresh data (force network call)
+  Future<void> refreshData() async {
+    await getData(forceRefresh: true);
+  }
+
+  // Method to clear cache
+  Future<void> clearCache() async {
+    await _homeRepository.clearCache();
+    _currentPage = 1;
+    state = null;
+    // Reload data after clearing cache
+    getData(forceRefresh: true);
   }
 }

@@ -1,26 +1,29 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'home_viewmodel.dart';
+part of 'home_repository_sqlite.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$homeViewModelHash() => r'98221e3a9c87ee014f35640e9e47ea66a1bb4541';
+String _$homeRepositorySQLiteHash() =>
+    r'26d677dbeab0cac4ed38a483f3ceba44dbbe82a3';
 
-/// See also [HomeViewModel].
-@ProviderFor(HomeViewModel)
-final homeViewModelProvider =
-    AutoDisposeNotifierProvider<HomeViewModel, AsyncValue<HomeState>?>.internal(
-      HomeViewModel.new,
-      name: r'homeViewModelProvider',
+/// See also [homeRepositorySQLite].
+@ProviderFor(homeRepositorySQLite)
+final homeRepositorySQLiteProvider =
+    AutoDisposeProvider<HomeRepositorySQLite>.internal(
+      homeRepositorySQLite,
+      name: r'homeRepositorySQLiteProvider',
       debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
-          : _$homeViewModelHash,
+          : _$homeRepositorySQLiteHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
 
-typedef _$HomeViewModel = AutoDisposeNotifier<AsyncValue<HomeState>?>;
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef HomeRepositorySQLiteRef = AutoDisposeProviderRef<HomeRepositorySQLite>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

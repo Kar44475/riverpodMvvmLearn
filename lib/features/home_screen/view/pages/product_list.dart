@@ -21,7 +21,7 @@ class _ProductListState extends ConsumerState<ProductList> {
       if (_scrollController.position.pixels >=
           _scrollController.position.maxScrollExtent - 200) {
         final viewModel = ref.read(homeViewModelProvider.notifier);
-        viewModel.getData(); // Trigger pagination
+        viewModel.getData(forceRefresh: false); // Trigger pagination
       }
     });
   }
