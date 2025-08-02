@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:learning/features/home_screen/Provider/selected_product_provider.dart';
 import 'package:learning/features/home_screen/viewmodel/home_viewmodel.dart';
-import 'package:learning/features/home_screen/model/product_model.dart';
+import 'package:learning/features/update_screen/view/update_product.dart';
 
 class ProductList extends ConsumerStatefulWidget {
   const ProductList({Key? key}) : super(key: key);
@@ -66,6 +67,19 @@ class _ProductListState extends ConsumerState<ProductList> {
 
                     final product = products[index];
                     return ListTile(
+                      onTap: () {
+                        // Set the selected product in the provider
+                        ref.read(selectedProductProviderProvider.notifier)
+                            .setSelectedProduct(product);
+                        
+                        // Navigate to update screen
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const UpdateProductView(),
+                          ),
+                        );
+                      },
                       title: Text(product.title ?? 'No Title'),
                       subtitle: Text(product.description ?? 'No Description'),
                     );

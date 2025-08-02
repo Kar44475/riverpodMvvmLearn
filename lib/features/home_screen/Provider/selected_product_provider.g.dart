@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'home_viewmodel.dart';
+part of 'selected_product_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$homeViewModelHash() => r'f960e84b5647f7055098fdf0d3ea2ba914e54278';
+String _$selectedProductProviderHash() =>
+    r'e7aa6be3b78b0c1523666873a78fad348193a2ff';
 
-/// See also [HomeViewModel].
-@ProviderFor(HomeViewModel)
-final homeViewModelProvider =
-    AutoDisposeNotifierProvider<HomeViewModel, AsyncValue<HomeState>?>.internal(
-      HomeViewModel.new,
-      name: r'homeViewModelProvider',
+/// See also [SelectedProductProvider].
+@ProviderFor(SelectedProductProvider)
+final selectedProductProviderProvider =
+    NotifierProvider<SelectedProductProvider, Product?>.internal(
+      SelectedProductProvider.new,
+      name: r'selectedProductProviderProvider',
       debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
-          : _$homeViewModelHash,
+          : _$selectedProductProviderHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
 
-typedef _$HomeViewModel = AutoDisposeNotifier<AsyncValue<HomeState>?>;
+typedef _$SelectedProductProvider = Notifier<Product?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
