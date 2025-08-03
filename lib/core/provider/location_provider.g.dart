@@ -1,26 +1,29 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'update_viewmodel.dart';
+part of 'location_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$updateViewModelHash() => r'6ed996309fcbe18919fe4c2ab8986d68679f8693';
+String _$getCurrentLocationHash() =>
+    r'17abbd10fed5feb16a3b7c5cc045f058efa7d6d2';
 
-/// See also [UpdateViewModel].
-@ProviderFor(UpdateViewModel)
-final updateViewModelProvider =
-    AutoDisposeNotifierProvider<UpdateViewModel, UpdateProductState>.internal(
-      UpdateViewModel.new,
-      name: r'updateViewModelProvider',
+/// See also [getCurrentLocation].
+@ProviderFor(getCurrentLocation)
+final getCurrentLocationProvider =
+    AutoDisposeFutureProvider<Position?>.internal(
+      getCurrentLocation,
+      name: r'getCurrentLocationProvider',
       debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
-          : _$updateViewModelHash,
+          : _$getCurrentLocationHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
 
-typedef _$UpdateViewModel = AutoDisposeNotifier<UpdateProductState>;
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetCurrentLocationRef = AutoDisposeFutureProviderRef<Position?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

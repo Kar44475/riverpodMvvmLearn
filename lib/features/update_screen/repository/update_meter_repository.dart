@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 import 'dart:typed_data';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
@@ -15,7 +15,7 @@ UpdateMeterRepository updateMeterRepository(Ref ref) {
 }
 
 class UpdateMeterRepository {
-  Future<Either<AppFailure, List<Product>>> postData({
+  Future<Either<AppFailure, Product>> postData({
     required int? productId,
     required double? productData,
     required Uint8List? imageBytes,
@@ -37,7 +37,7 @@ class UpdateMeterRepository {
         image: null,
         rating: null,
       );
-      return Right([fakeProduct]);
+      return Right(fakeProduct);
     } catch (e) {
       // Only return failure if there is no internet (network error)
       return Left(AppFailure('No internet connection or network error: $e'));

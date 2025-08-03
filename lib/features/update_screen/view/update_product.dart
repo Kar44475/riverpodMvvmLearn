@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:learning/core/provider/permission_provider.dart';
 import 'package:learning/features/update_screen/update_viewmodel/update_viewmodel.dart';
 // import 'package:learning/features/update_screen/viewmodel/update_viewmodel.dart';
 
@@ -17,6 +18,12 @@ class _UpdateProductViewState extends ConsumerState<UpdateProductView> {
   void dispose() {
     _detailsController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
   }
 
   @override
@@ -147,7 +154,7 @@ class _UpdateProductViewState extends ConsumerState<UpdateProductView> {
                           Expanded(
                             child: ElevatedButton.icon(
                               onPressed: (state.isUpdating || state.isLoading) ? null : () {
-                          //      viewModel.capturePhoto();
+                                viewModel.capturePhoto();
                               },
                               icon: const Icon(Icons.camera_alt),
                               label: const Text('Capture Photo'),

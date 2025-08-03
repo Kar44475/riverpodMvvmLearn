@@ -120,30 +120,7 @@ class DatabaseHelper {
     );
   }
 
-  // Get readings by date range (if needed for analytics)
-  Future<List<Map<String, dynamic>>> getReadingsByDateRange({
-    required DateTime startDate,
-    required DateTime endDate,
-  }) async {
-    final db = await database;
-    final startTimestamp = startDate.millisecondsSinceEpoch ~/ 1000;
-    final endTimestamp = endDate.millisecondsSinceEpoch ~/ 1000;
-    
-    final results = await db.query(
-      'temp_readings',
-      where: 'created_at BETWEEN ? AND ?',
-      whereArgs: [startTimestamp, endTimestamp],
-      orderBy: 'created_at ASC',
-    );
-    
-    return results.map((row) {
-      final Map<String, dynamic> processedRow = Map.from(row);
-      if (processedRow['image'] != null) {
-        processedRow['image'] = processedRow['image'] as Uint8List;
-      }
-      return processedRow;
-    }).toList();
-  }
+
 
   // Close database
   Future<void> close() async {
@@ -153,17 +130,5 @@ class DatabaseHelper {
     }
   }
 
-  // Database maintenance - clean old entries if needed
-  Future<void> cleanOldEntries({int daysToKeep = 30}) async {
-    final db = await database;
-    final cutoffTimestamp = DateTime.now()
-        .subtract(Duration(days: daysToKeep))
-        .millisecondsSinceEpoch ~/ 1000;
-    
-    await db.delete(
-      'temp_readings',
-      where: 'created_at < ?',
-      whereArgs: [cutoffTimestamp],
-    );
-  }
+
 }
