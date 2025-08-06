@@ -7,21 +7,46 @@ part 'location_provider.g.dart';
 @riverpod
 Future<Position?> getCurrentLocation(Ref ref) async {
   try {
-    final permissionProvider = ref.read(permissionProviderProvider.notifier);
-    
-    // Check if location permission is granted
-    if (!ref.read(permissionProviderProvider).locationGranted) {
-      final granted = await permissionProvider.requestLocationPermission();
-      if (!granted) return null;
+ 
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      print('Location services are disabled');
+
+      return null;
     }
 
-     LocationSettings locationSettings = LocationSettings(
-  accuracy: LocationAccuracy.high,
-  distanceFilter: 100,
-);
+ 
+    LocationPermission permission = await Geolocator.checkPermission();
+    
 
-Position position = await Geolocator.getCurrentPosition(locationSettings: locationSettings);
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        print('Location permissions are denied');
+        return null;
+      }
+    }
+    
+
+    if (permission == LocationPermission.deniedForever) {
+      print('Location permissions are permanently denied');
+
+      return null;
+    }
+
+    LocationSettings locationSettings = const LocationSettings(
+      accuracy: LocationAccuracy.high,
+      timeLimit: Duration(seconds: 20),
+      distanceFilter: 100,
+    );
+
+    Position position = await Geolocator.getCurrentPosition(
+      locationSettings: locationSettings
+    );
+    
+    print('Location obtained: ${position.latitude}, ${position.longitude}');
     return position;
+    
   } catch (e) {
     print('Error getting location: $e');
     return null;

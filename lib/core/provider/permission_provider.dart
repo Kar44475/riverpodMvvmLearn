@@ -1,11 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'permission_provider.g.dart';
 
-// Simplified Permission State - only what you need
 class PermissionState {
   final bool cameraGranted;
   final bool locationGranted;
@@ -28,7 +26,8 @@ class PermissionState {
     return PermissionState(
       cameraGranted: cameraGranted ?? this.cameraGranted,
       locationGranted: locationGranted ?? this.locationGranted,
-      isCheckingPermissions: isCheckingPermissions ?? this.isCheckingPermissions,
+      isCheckingPermissions:
+          isCheckingPermissions ?? this.isCheckingPermissions,
       error: error,
     );
   }
@@ -41,17 +40,21 @@ class PermissionProvider extends _$PermissionProvider {
     return const PermissionState();
   }
 
-  // Check permissions - only camera and location
   Future<void> checkAllPermissions() async {
     state = state.copyWith(isCheckingPermissions: true, error: null);
 
     try {
       final cameraStatus = await Permission.camera.status;
-      final locationStatus = await Permission.location.status;
+
+      LocationPermission locationPermission =
+          await Geolocator.checkPermission();
+      bool locationGranted =
+          locationPermission == LocationPermission.whileInUse ||
+          locationPermission == LocationPermission.always;
 
       state = state.copyWith(
         cameraGranted: cameraStatus.isGranted,
-        locationGranted: locationStatus.isGranted,
+        locationGranted: locationGranted,
         isCheckingPermissions: false,
       );
     } catch (e) {
@@ -62,20 +65,20 @@ class PermissionProvider extends _$PermissionProvider {
     }
   }
 
-  // Request camera permission - ONLY THIS IS NEEDED FOR PHOTO CAPTURE
   Future<bool> requestCameraPermission() async {
     try {
       final status = await Permission.camera.request();
-      
+
       final granted = status.isGranted;
       state = state.copyWith(cameraGranted: granted);
-      
+
       if (!granted && status.isPermanentlyDenied) {
         state = state.copyWith(
-          error: 'Camera permission permanently denied. Please enable in settings.',
+          error:
+              'Camera permission permanently denied. Please enable in settings.',
         );
       }
-      
+
       return granted;
     } catch (e) {
       state = state.copyWith(error: 'Failed to request camera permission: $e');
@@ -83,13 +86,13 @@ class PermissionProvider extends _$PermissionProvider {
     }
   }
 
-  // Request location permission (only if you need GPS coordinates)
   Future<bool> requestLocationPermission() async {
-    try {      
+    try {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         state = state.copyWith(
-          error: 'Location services are disabled. Please enable location services.',
+          error:
+              'Location services are disabled. Please enable location services.',
         );
         return false;
       }
@@ -108,29 +111,31 @@ class PermissionProvider extends _$PermissionProvider {
 
       if (permission == LocationPermission.deniedForever) {
         state = state.copyWith(
-          error: 'Location permission permanently denied. Please enable in settings.',
+          error:
+              'Location permission permanently denied. Please enable in settings.',
           locationGranted: false,
         );
         return false;
       }
 
-      final granted = permission == LocationPermission.whileInUse || 
-                     permission == LocationPermission.always;
-      
+      final granted =
+          permission == LocationPermission.whileInUse ||
+          permission == LocationPermission.always;
+
       state = state.copyWith(locationGranted: granted);
       return granted;
     } catch (e) {
-      state = state.copyWith(error: 'Failed to request location permission: $e');
+      state = state.copyWith(
+        error: 'Failed to request location permission: $e',
+      );
       return false;
     }
   }
 
-  // Open app settings
   Future<void> openAppSettings() async {
     await openAppSettings();
   }
 
-  // Clear error
   void clearError() {
     state = state.copyWith(error: null);
   }

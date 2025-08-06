@@ -37,7 +37,7 @@ class UpdateMeterRepository {
         image: null,
         rating: null,
       );
-      return Right(fakeProduct);
+      return  Right(fakeProduct);
     } catch (e) {
       // Only return failure if there is no internet (network error)
       return Left(AppFailure('No internet connection or network error: $e'));

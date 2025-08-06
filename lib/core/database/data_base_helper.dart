@@ -38,7 +38,7 @@ class DatabaseHelper {
     ''');
   }
 
-  // Insert a temp reading - matches connectivity_provider usage
+
   Future<void> insertTempReading({
     required int id,
     required double reading,
@@ -60,12 +60,12 @@ class DatabaseHelper {
     );
   }
 
-  // Get all temp readings - returns format expected by connectivity_provider
+
   Future<List<Map<String, dynamic>>> getAllTempReadings() async {
     final db = await database;
     final results = await db.query('temp_readings', orderBy: 'created_at ASC');
     
-    // Convert BLOB back to Uint8List for consistency
+
     return results.map((row) {
       final Map<String, dynamic> processedRow = Map.from(row);
       if (processedRow['image'] != null) {
@@ -75,20 +75,20 @@ class DatabaseHelper {
     }).toList();
   }
 
-  // Get count of pending readings
+
   Future<int> getPendingReadingsCount() async {
     final db = await database;
     final result = await db.rawQuery('SELECT COUNT(*) as count FROM temp_readings');
     return Sqflite.firstIntValue(result) ?? 0;
   }
 
-  // Delete a single temp reading by id - matches connectivity_provider usage
+ 
   Future<void> deleteTempReading(int id) async {
     final db = await database;
     await db.delete('temp_readings', where: 'id = ?', whereArgs: [id]);
   }
 
-  // Delete all temp readings (after successful sync)
+
   Future<void> clearTempReadings() async {
     final db = await database;
     await db.delete('temp_readings');
@@ -98,7 +98,7 @@ class DatabaseHelper {
 
   
 
-  // Update existing temp reading
+
   Future<void> updateTempReading({
     required int id,
     required double reading,
